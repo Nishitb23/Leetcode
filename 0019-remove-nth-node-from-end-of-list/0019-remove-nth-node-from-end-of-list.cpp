@@ -12,30 +12,27 @@ class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
         
-        int size =0;
-        ListNode* temp = head;
-        vector<ListNode*> v;
+        ListNode *slow= head,*fast= head;
         
-        while(temp){
-            size++;
-            v.push_back(temp);
-            temp = temp->next;
+        for(int i=0;i<n;i++){
+            fast = fast->next;
         }
         
-        if(n==1){
-            if(size==1){
-                return NULL;
-            }else{
-                v[size-2]->next= NULL;
-                delete v[size-1];
-            }
-        }else if(n==size){
-            delete v[0];
-            return v[1];
-        }else{
-            v[size-n-1]->next = v[size-n+1];
-            delete v[size-n];
+        if(!fast){
+            ListNode* temp = head;
+            head = head->next;
+            delete temp;
+            return head;
         }
+        
+        while(fast->next){
+            slow = slow->next;
+            fast = fast->next;
+        }
+        
+        ListNode* temp = slow->next;
+        slow->next= slow->next->next;
+        delete temp;
         
         return head;
         
